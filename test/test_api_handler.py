@@ -5,9 +5,9 @@ from os.path import abspath, join, dirname
 
 sys.path.append(abspath(join(dirname("__file__"), "..")))
 
-from facts_api_adapter import FactsAPIAdapter
+from facts_api_handler import facts_api_handler
 
-def test_get_fact():
-	fact = (FactsAPIAdapter()).getFact()
+async def test_get_fact():
+	fact = await facts_api_handler.getFact()
 	
 	assert len(fact) > 0

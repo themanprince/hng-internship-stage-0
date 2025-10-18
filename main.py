@@ -13,7 +13,7 @@ app.add_middleware(
 	allow_headers=["*"]
 )
 
-app.middleware("http")(get_logger_middleware("log/logs.txt"))
+app.middleware("http")(get_logger_middleware(log_file_path = "log/logs.txt"))
 
 
 @app.get("/me")

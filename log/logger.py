@@ -1,13 +1,14 @@
+from fastapi import HTTPException
 from logging import getLogger, StreamHandler, FileHandler, Formatter
 from uvicorn.logging import ColourizedFormatter
 from fastapi import Request
 
 logger_instance_exists = False
 
-class LoggerSingleton(object):
+class Logger(object):
 	def __init__(self, logger_name = "my_logger", log_file_path = None):
-		if logger_instance_exists:
-			raise ValueError("An Instance of Logger already exists")
+		if logger_instance_exists: #singleton
+			raise HTTPException(500, detail="An Instance of Logger already exists")
 		
 		logger_instance_exists = True
 		
@@ -43,10 +44,13 @@ class LoggerSingleton(object):
 
 	def info(content):
 		return self._logger.info(content)
+	
+	def error(content):
+		return self._logger.error(content)
+		
 
 
-
-logger = LoggerSingleton()
+logger = Logger()
 
 def get_logger_middleware(log_file_path):
 	logger.set_log_file_path(log_file_path)
