@@ -26,7 +26,7 @@ class Logger(object):
 		
 		console_handler = StreamHandler()
 		console_formatter = ColourizedFormatter(
-			"%(levelprefix)s -- %(message)s",
+			"%(message)s",
 			use_colors=True
 		)
 		console_handler.setFormatter(console_formatter)
@@ -35,7 +35,7 @@ class Logger(object):
 
 	def _make_file_handler(self, log_file_path):
 		file_handler = FileHandler(log_file_path)
-		file_formatter = Formatter("%(levelname)s -- %(message)s")
+		file_formatter = Formatter("%(message)s")
 		file_handler.setFormatter(file_formatter)
 		self._logger.addHandler(file_handler)
 		self._file_handler = file_handler
@@ -63,9 +63,9 @@ def get_logger_middleware(log_file_path):
 	logger.set_log_file_path(log_file_path)
 	
 	async def logger_middleware(req: Request, call_next):
-		logger.info(f"\n{req.method} {req.url}")
+		logger.info(f"{req.method} {req.url}")
 		response = await call_next(req)
-		logger.info(f"RESPONSE -- {response}\n\n")
+		logger.info(f"RESPONSE -- status_code={response.status_code}, media_type={response.media_type}")
 		return response
 	
 	return logger_middleware

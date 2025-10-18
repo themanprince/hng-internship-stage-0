@@ -1,0 +1,7 @@
+INFO -- 
+GET http://localhost:8000/me
+INFO -- RESPONSE -- <starlette.middleware.base._StreamingResponse object at 0x7aecc832c0>
+
+
+INFO GET http://localhost:8000/me
+INFO RESPONSE -- status_code=500, media_type=None
