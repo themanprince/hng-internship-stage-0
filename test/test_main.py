@@ -11,7 +11,7 @@ from main import app
 import re
 
 
-def all_in(dictObj, **list_of_keys):
+def all_in(dictObj, *list_of_keys):
 	for key in list_of_keys:
 		if (key not in dictObj) or (not dictObj[key]):
 			return False

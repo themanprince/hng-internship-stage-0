@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from logging import getLogger, StreamHandler, FileHandler, Formatter
+from logging import basicConfig, INFO, getLogger, StreamHandler, FileHandler, Formatter
 from uvicorn.logging import ColourizedFormatter
 from fastapi import Request
 
@@ -13,7 +13,8 @@ class Logger(object):
 			raise HTTPException(500, detail="An Instance of Logger already exists")
 		
 		logger_instance_exists = True
-		
+	
+		basicConfig(level = INFO)
 		self._logger = getLogger(logger_name)
 		
 		self._file_handler = None
@@ -65,5 +66,6 @@ def get_logger_middleware(log_file_path):
 		logger.info(f"\n{req.method} {req.url}")
 		response = await call_next(req)
 		logger.info(f"RESPONSE -- {response}\n\n")
+		return response
 	
 	return logger_middleware
