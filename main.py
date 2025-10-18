@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from log.logger import logger, logger_middleware
+from log.logger import get_logger_middleware
 
 
 app = FastAPI()
@@ -13,7 +13,7 @@ app.add_middleware(
 	allow_headers=["*"]
 )
 
-app.middleware("http")(logger_middleware)
+app.middleware("http")(get_logger_middleware("log/logs.txt"))
 
 
 @app.get("/me")
