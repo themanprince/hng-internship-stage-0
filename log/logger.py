@@ -7,13 +7,19 @@ logger_instance_exists = False
 
 class Logger(object):
 	def __init__(self, logger_name = "my_logger", log_file_path = None):
+		global logger_instance_exists
+		
 		if logger_instance_exists: #singleton
 			raise HTTPException(500, detail="An Instance of Logger already exists")
 		
 		logger_instance_exists = True
 		
 		self._logger = getLogger(logger_name)
-
+		
+		self._file_handler = None
+		#created empty file_handler variable, so that 
+		# if its not set now (by the _make_file_handler() method)
+		# a file_handler can still be set later (by the set_log_file_path() method)
 		if log_file_path is not None:
 			self._make_file_handler(log_file_path)
 		
@@ -56,8 +62,8 @@ def get_logger_middleware(log_file_path):
 	logger.set_log_file_path(log_file_path)
 	
 	async def logger_middleware(req: Request, call_next):
-		logger.info(f"{req.method} {req.url}")
+		logger.info(f"\n{req.method} {req.url}")
 		response = await call_next(req)
-		logger.info(f"RESPONSE -- {response}")
+		logger.info(f"RESPONSE -- {response}\n\n")
 	
 	return logger_middleware
