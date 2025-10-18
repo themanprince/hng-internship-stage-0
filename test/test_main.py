@@ -10,8 +10,6 @@ from fastapi.testclient import TestClient
 from main import app
 import re
 
-client = TestClient(app)
-
 
 def all_in(dictObj, **list_of_keys):
 	for key in list_of_keys:
@@ -21,7 +19,9 @@ def all_in(dictObj, **list_of_keys):
 
 
 def test_main():
+	client = TestClient(app)
 	response = client.get("/me")
+	
 	assert response.status_code == 200
 	assert response.headers["Content-Type"] == "application/json"
 	

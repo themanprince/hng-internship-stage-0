@@ -6,6 +6,8 @@ handler_instance_created = False
 
 class FactsAPIHandler(object):
 	def __init__(self):
+		global handler_instance_created
+		
 		if handler_instance_created: #singleton
 			raise HTTPException(500, detail="instance of FactsAPIHandler already exists")
 		
@@ -14,22 +16,20 @@ class FactsAPIHandler(object):
 	
 	async def get_fact(self):
 		timeout = (dotenv_values(".env"))["API_QUERY_TIMEOUT"]
-		timeout = int(timeout)
+		timeout = float(timeout) or 3
 		
 		async with AsyncClient(timeout=timeout) as client:
 			try:
 				response = await client.get("https://catfact.ninja/fact")
-				return response.json()
+				response.raise_for_status()
+				response = response.json()
+				return response["fact"]
 			
-			except TimeoutException as timeout_exception:
-				return {
-					"error": "Sorry. The Request Timed Out! Please try again"
-				}
+			except TimeoutException:
+				raise HTTPException(500, detail="Sorry. The Request Timed Out!")
 				
-			except RequestError as request_error:
-				return {
-					"error": request_error
-				}
+			except RequestError:
+				raise HTTPException(500, detail="unable to reach API")
 
 
 facts_api_handler = FactsAPIHandler()

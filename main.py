@@ -7,7 +7,7 @@ from slowapi.errors import RateLimitExceeded
 from dotenv import dotenv_values
 from datetime import datetime, timezone
 from facts_api_handler import facts_api_handler
-from log.logger import get_logger_middleware
+from log import logger
 
 
 app = FastAPI()
@@ -27,14 +27,14 @@ app.add_middleware(
 	allow_headers=["*"]
 )
 
-app.middleware("http")(get_logger_middleware(log_file_path = "log/logs.txt"))
+app.middleware("http")(logger.get_logger_middleware(log_file_path = "log/logs.txt"))
 
 
 @app.get("/me", response_class=ORJSONResponse)
 @limiter.limit(limit or "60/minute")
 async def handleGetMe(request: Request, response: Response):
 	fact = await facts_api_handler.get_fact()
-	timestamp = datetime.now(timezone.utc()).isoformat()
+	timestamp = datetime.now(timezone.utc).isoformat()
 
 	payload =  {
 		"status": "success",

@@ -48,10 +48,10 @@ class Logger(object):
 		self._make_file_handler(log_file_path)
 
 
-	def info(content):
+	def info(self, content):
 		return self._logger.info(content)
 	
-	def error(content):
+	def error(self, content):
 		return self._logger.error(content)
 		
 
