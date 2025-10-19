@@ -10,7 +10,7 @@ from log import logger
 import os
 from facts_api_handler import facts_api_handler
 
-load_env()
+load_dotenv()
 
 app = FastAPI()
 
