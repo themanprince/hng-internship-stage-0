@@ -1,6 +1,9 @@
 from fastapi import HTTPException
 from httpx import AsyncClient, TimeoutException, RequestError
-from dotenv import dotenv_values
+from dotenv import load_env
+import os
+
+load_env()
 
 handler_instance_created = False
 
@@ -15,8 +18,8 @@ class FactsAPIHandler(object):
 		
 	
 	async def get_fact(self):
-		timeout = (dotenv_values(".env"))["API_QUERY_TIMEOUT"]
-		timeout = float(timeout) or 3
+		timeout = os.getenv("API_QUERY_TIMEOUT", 5)
+		timeout = float(timeout)
 		
 		async with AsyncClient(timeout=timeout) as client:
 			try:
