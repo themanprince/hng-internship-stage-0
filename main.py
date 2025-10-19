@@ -4,11 +4,13 @@ from fastapi.responses import ORJSONResponse
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
-from dotenv import dotenv_values
+from dotenv import load_env
 from datetime import datetime, timezone
-from facts_api_handler import facts_api_handler
 from log import logger
+import os
+from facts_api_handler import facts_api_handler
 
+load_env()
 
 app = FastAPI()
 
@@ -16,7 +18,7 @@ app = FastAPI()
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-limit = (dotenv_values(".env"))["RATE_LIMIT"]
+limit = os.getenv("RATE_LIMIT", "60/minute")
 
 
 app.add_middleware(
