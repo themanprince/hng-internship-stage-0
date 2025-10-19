@@ -4,7 +4,7 @@ from fastapi.responses import ORJSONResponse
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
-from dotenv import load_env
+from dotenv import load_dotenv
 from datetime import datetime, timezone
 from log import logger
 import os
