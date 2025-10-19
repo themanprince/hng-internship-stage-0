@@ -1,9 +1,9 @@
 from fastapi import HTTPException
 from httpx import AsyncClient, TimeoutException, RequestError
-from dotenv import load_env
+from dotenv import load_dotenv
 import os
 
-load_env()
+load_dotenv()
 
 handler_instance_created = False
 
